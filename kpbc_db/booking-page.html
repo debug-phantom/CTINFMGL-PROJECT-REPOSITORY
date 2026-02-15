@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Court | Katipunan Prime Badminton Center</title>
+    <link rel="stylesheet" href="booking.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Theme (default) */
+            --brand: #0066ff;
+            --brand-soft: #f1f7ff;
+            --dark: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --bg-primary: #f8fafc;
+            --bg-card: white;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --nav-bg: white;
+            --overlay-bg: rgba(0,0,0,0.5);
+            --success-card-bg: white;
+            --shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme */
+            --brand: #3b82f6;
+            --brand-soft: #1e293b;
+            --dark: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #334155;
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --nav-bg: #1e293b;
+            --overlay-bg: rgba(0,0,0,0.7);
+            --success-card-bg: #1e293b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ========== THEME ICONS (FIXED) ========== */
+        .sun-icon { display: none; }
+        .moon-icon { display: inline; }
+
+        [data-theme="light"] .moon-icon { display: none; }
+        [data-theme="light"] .sun-icon { display: inline; }
+
+        [data-theme="dark"] .moon-icon { display: inline; }
+        [data-theme="dark"] .sun-icon { display: none; }
+
+        /* Additional styles for better UX */
+        .rate-pills {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .rate-pill {
+            flex: 1;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .rate-pill.active {
+            background: var(--brand);
+            color: white;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .rate-pill:hover:not(.active) {
+            border-color: var(--brand);
+            color: var(--brand);
+        }
+        
+        .custom-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            margin: 0.5rem 0 1.5rem 0;
+            transition: all 0.3s ease;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+        }
+        
+        .custom-input:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .action-footer {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .summary-sheet {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            margin: 2rem 0;
+        }
+        
+        .sum-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sum-row:last-child {
+            border-bottom: none;
+        }
+        
+        .sum-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.25rem 0;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--brand);
+            border-top: 2px solid var(--brand);
+            margin-top: 1rem;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-left: auto;
+            margin-right: 1rem;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Info and Tip Boxes */
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--brand);
+        }
+
+        .tip-box {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .step-content {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .check-mark {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin: 1rem 0;
+        }
+        
+        #success-overlay .id-tag {
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            padding: 1.25rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--brand);
+            border: 2px dashed var(--brand);
+        }
+        
+        .booking-card {
+            animation: slideUp 0.6s ease;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .time-btn, .court-box, .equip-card, .pay-box {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+        }
+        
+        .selected {
+            transform: scale(1.02);
+            border-color: var(--brand) !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Loading animation for processing */
+        .processing {
+            position: relative;
+        }
+        
+        .processing::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            right: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="neat-nav">
+        <div class="nav-content">
+            <div class="logo" onclick="window.location.href='user.html'" style="cursor: pointer;">
+                Katipunan<span style="color: var(--brand);">Prime</span>
+            </div>
+            <div class="nav-menu">
+                <a href="user.html"> Home</a>
+                <a href="rates-page.html"> Rates</a>
+                <a href="user.html#gallery"> Facilities</a>
+                <a href="booking-page.html" class="active"> Book Now</a>
+                <a href="admin.html" style="color: var(--error-color);"> Admin</a>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <svg class="moon-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg class="sun-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="theme-text">Light Mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="booking-section">
+        <div class="stepper">
+            <div class="step active" id="s1"><div class="step-num">1</div><span>Court</span></div>
+            <div class="step" id="s2"><div class="step-num">2</div><span>Time</span></div>
+            <div class="step" id="s3"><div class="step-num">3</div><span>Extras</span></div>
+            <div class="step" id="s4"><div class="step-num">4</div><span>Review</span></div>
+            <div class="step" id="s5"><div class="step-num">5</div><span>Payment</span></div>
+        </div>
+
+        <div class="booking-card">
+            <section id="step-1" class="step-content active">
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Select Court & Date</h2>
+                
+                <label for="booking-date">Choose Date</label>
+                <input type="date" id="booking-date" class="custom-input" required>
+                
+                <label>Select Court (All courts are air-conditioned)</label>
+                <div class="court-grid">
+                    <div class="court-box glow-hover" data-court="1">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏸</div>
+                        <strong>Court 01</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Premium</div>
+                    </div>
+                    <div class="court-box glow-hover" data-court="2">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏸</div>
+                        <strong>Court 02</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Premium</div>
+                    </div>
+                    <div class="court-box glow-hover" data-court="3">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏸</div>
+                        <strong>Court 03</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Standard</div>
+                    </div>
+                    <div class="court-box glow-hover" data-court="4">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏸</div>
+                        <strong>Court 04</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Standard</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span>💡</span>
+                        <strong>Tip</strong>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+                        Courts 1-2 are premium courts with tournament-grade flooring. All courts include free parking.
+                    </p>
+                </div>
+                
+                <button class="btn btn-main glow-hover" onclick="nextStep(2)" style="margin-top: 1rem;">
+                    Next: Select Time →
+                </button>
+            </section>
+
+            <section id="step-2" class="step-content hidden">
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Select Rate & Time</h2>
+                
+                <label>Select Rate Type</label>
+                <div class="rate-pills">
+                    <button class="rate-pill active glow-hover" id="rate-hourly">Hourly Rate (₱170/hour)</button>
+                    <button class="rate-pill glow-hover" id="rate-all">Play-All (₱200 flat)</button>
+                </div>
+                
+                <div class="tip-box">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span>💰</span>
+                        <strong>Best Value</strong>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #92400e; margin: 0;">
+                        Play-All is perfect for tournaments or practice sessions lasting more than 1 hour.
+                    </p>
+                </div>
+                
+                <label>Select Time Slot (2-hour sessions)</label>
+                <div class="time-grid">
+                    <div class="time-btn glow-hover" data-time="08:00-10:00">
+                        <div style="font-size: 1.1rem; font-weight: 700;">08:00 AM</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">to 10:00 AM</div>
+                    </div>
+                    <div class="time-btn glow-hover" data-time="10:00-12:00">
+                        <div style="font-size: 1.1rem; font-weight: 700;">10:00 AM</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">to 12:00 PM</div>
+                    </div>
+                    <div class="time-btn glow-hover" data-time="13:00-15:00">
+                        <div style="font-size: 1.1rem; font-weight: 700;">01:00 PM</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">to 03:00 PM</div>
+                    </div>
+                    <div class="time-btn glow-hover" data-time="15:00-17:00">
+                        <div style="font-size: 1.1rem; font-weight: 700;">03:00 PM</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">to 05:00 PM</div>
+                    </div>
+                    <div class="time-btn glow-hover" data-time="17:00-19:00">
+                        <div style="font-size: 1.1rem; font-weight: 700;">05:00 PM</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">to 07:00 PM</div>
+                    </div>
+                    <div class="time-btn glow-hover" data-time="19:00-21:00">
+                        <div style="font-size: 1.1rem; font-weight: 700;">07:00 PM</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">to 09:00 PM</div>
+                    </div>
+                </div>
+                
+                <div class="action-footer">
+                    <button class="btn btn-ghost glow-hover" onclick="nextStep(1)">
+                        ← Back
+                    </button>
+                    <button class="btn btn-main glow-hover" onclick="nextStep(3)">
+                        Next: Add Equipment →
+                    </button>
+                </div>
+            </section>
+
+            <section id="step-3" class="step-content hidden">
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Equipment & Essentials</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Add equipment rentals to your booking (optional)</p>
+                
+                <div class="equip-grid">
+                    <div class="equip-card glow-hover">
+                        <div class="equip-emoji" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏸</div>
+                        <strong style="display: block; margin-bottom: 0.25rem;">Racket</strong>
+                        <span style="color: var(--success-color); font-weight: 600;">₱50</span>
+                        <div class="counter" style="margin-top: 1rem;">
+                            <button onclick="adjQty('racket', -1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">-</button>
+                            <span id="q-racket" style="min-width: 30px; text-align: center; font-weight: 700; font-size: 1.2rem;">0</span>
+                            <button onclick="adjQty('racket', 1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">+</button>
+                        </div>
+                    </div>
+                    <div class="equip-card glow-hover">
+                        <div class="equip-emoji" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎾</div>
+                        <strong style="display: block; margin-bottom: 0.25rem;">Shuttlecock</strong>
+                        <span style="color: var(--success-color); font-weight: 600;">₱30</span>
+                        <div class="counter" style="margin-top: 1rem;">
+                            <button onclick="adjQty('shuttlecock', -1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">-</button>
+                            <span id="q-shuttlecock" style="min-width: 30px; text-align: center; font-weight: 700; font-size: 1.2rem;">0</span>
+                            <button onclick="adjQty('shuttlecock', 1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">+</button>
+                        </div>
+                    </div>
+                    <div class="equip-card glow-hover">
+                        <div class="equip-emoji" style="font-size: 2.5rem; margin-bottom: 0.5rem;">👟</div>
+                        <strong style="display: block; margin-bottom: 0.25rem;">Shoes</strong>
+                        <span style="color: var(--success-color); font-weight: 600;">₱80</span>
+                        <div class="counter" style="margin-top: 1rem;">
+                            <button onclick="adjQty('shoes', -1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">-</button>
+                            <span id="q-shoes" style="min-width: 30px; text-align: center; font-weight: 700; font-size: 1.2rem;">0</span>
+                            <button onclick="adjQty('shoes', 1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">+</button>
+                        </div>
+                    </div>
+                    <div class="equip-card glow-hover">
+                        <div class="equip-emoji" style="font-size: 2.5rem; margin-bottom: 0.5rem;">💧</div>
+                        <strong style="display: block; margin-bottom: 0.25rem;">Water Bottle</strong>
+                        <span style="color: var(--success-color); font-weight: 600;">₱15</span>
+                        <div class="counter" style="margin-top: 1rem;">
+                            <button onclick="adjQty('water', -1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">-</button>
+                            <span id="q-water" style="min-width: 30px; text-align: center; font-weight: 700; font-size: 1.2rem;">0</span>
+                            <button onclick="adjQty('water', 1)" style="width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--brand-soft); color: var(--brand); cursor: pointer; font-size: 1.2rem;">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span>🏷️</span>
+                        <strong>Equipment Note</strong>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+                        All equipment is sanitized after each use. Premium Yonex rackets available.
+                    </p>
+                </div>
+                
+                <div class="action-footer">
+                    <button class="btn btn-ghost glow-hover" onclick="nextStep(2)">
+                        ← Back
+                    </button>
+                    <button class="btn btn-main glow-hover" onclick="nextStep(4)">
+                        Review Booking →
+                    </button>
+                </div>
+            </section>
+
+            <section id="step-4" class="step-content hidden">
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Review Your Booking</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Please review all details before proceeding to payment</p>
+                
+                <div class="summary-sheet">
+                    <div class="sum-row">
+                        <span>Court:</span>
+                        <strong id="res-court" style="color: var(--brand);">-</strong>
+                    </div>
+                    <div class="sum-row">
+                        <span>Date:</span>
+                        <strong id="res-date">-</strong>
+                    </div>
+                    <div class="sum-row">
+                        <span>Time Slot:</span>
+                        <strong id="res-time">-</strong>
+                    </div>
+                    <div class="sum-row">
+                        <span>Rate Type:</span>
+                        <strong id="res-rate-type">-</strong>
+                    </div>
+                    
+                    <div id="equipment-summary" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Equipment:</div>
+                        <div id="equipment-items" style="font-size: 0.9rem; color: var(--text-secondary);">
+                            No equipment selected
+                        </div>
+                    </div>
+                    
+                    <div class="sum-total">
+                        <span>Total Due:</span>
+                        <span id="res-total" style="font-size: 1.8rem;">₱0</span>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span>📋</span>
+                        <strong>Booking Policy</strong>
+                    </div>
+                    <ul style="font-size: 0.85rem; color: #92400e; margin: 0; padding-left: 1.2rem;">
+                        <li>Cancellation allowed up to 24 hours before booking</li>
+                        <li>No-shows will be charged 50% of booking fee</li>
+                        <li>Equipment rentals are non-refundable</li>
+                    </ul>
+                </div>
+                
+                <div class="action-footer">
+                    <button class="btn btn-ghost glow-hover" onclick="nextStep(3)">
+                        ← Edit Booking
+                    </button>
+                    <button class="btn btn-main glow-hover" onclick="nextStep(5)">
+                        Proceed to Payment →
+                    </button>
+                </div>
+            </section>
+
+            <section id="step-5" class="step-content hidden">
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Payment Information</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Select your preferred payment method</p>
+                
+                <label>Payment Method</label>
+                <div class="payment-grid">
+                    <div class="pay-box glow-hover" data-method="gcash">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/GCash_logo.svg/1200px-GCash_logo.svg.png" height="35" alt="GCash" style="margin-bottom: 0.5rem;">
+                        <span style="font-weight: 600;">GCash</span>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Pay via QR/App</div>
+                    </div>
+                    <div class="pay-box glow-hover" data-method="paymaya">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/PayMaya_Logo.png/1200px-PayMaya_Logo.png" height="35" alt="Maya" style="margin-bottom: 0.5rem;">
+                        <span style="font-weight: 600;">Maya</span>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Pay via QR/App</div>
+                    </div>
+                    <div class="pay-box glow-hover" data-method="card">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💳</div>
+                        <span style="font-weight: 600;">Debit Card</span>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">VISA/Mastercard</div>
+                    </div>
+                    <div class="pay-box glow-hover" data-method="cash">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💵</div>
+                        <span style="font-weight: 600;">Cash</span>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Pay at court</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span>🔒</span>
+                        <strong>Secure Payment</strong>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+                        All transactions are secure and encrypted. You'll receive a confirmation email.
+                    </p>
+                </div>
+                
+                <label for="user-email">Email Address (Optional)</label>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: -5px; margin-bottom: 0.5rem;">
+                    Provide an email to receive a digital receipt and booking confirmation.
+                </p>
+                <input type="email" id="user-email" class="custom-input" placeholder="your.email@example.com" value="jamescastrol23@gmail.com">
+                
+                <div style="background: var(--brand-soft); padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Total Amount:</span>
+                        <strong style="font-size: 1.2rem; color: var(--brand);" id="payment-total">₱0</strong>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); text-align: center;">
+                        Click "Confirm & Pay" to complete your booking
+                    </div>
+                </div>
+                
+                <div class="action-footer">
+                    <button class="btn btn-ghost glow-hover" onclick="nextStep(4)">
+                        ← Back
+                    </button>
+                    <button class="btn btn-main glow-hover" id="confirm-pay-btn" onclick="finishBooking()" style="flex: 2;">
+                        <span style="font-size: 1.1rem;">✅</span> Confirm & Pay
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                        By completing this booking, you agree to our 
+                        <a href="#" style="color: var(--brand);">Terms & Conditions</a>
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ========== SUCCESS OVERLAY (with Receipt Button) ========== -->
+    <div id="success-overlay" class="overlay hidden">
+        <div class="success-card">
+            <div class="check-mark">✓</div>
+            <h2 style="margin-bottom: 0.5rem;">Booking Complete!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Your court has been successfully reserved.</p>
+            
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">Your booking reference:</p>
+            <div class="id-tag" id="final-id">KPBC-XXXXXX</div>
+            
+            <div class="info-box" style="text-align: left;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <span>📋</span>
+                    <strong>Booking Details</strong>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                    <div>Court: <strong id="success-court">-</strong></div>
+                    <div>Date: <strong id="success-date">-</strong></div>
+                    <div>Time: <strong id="success-time">-</strong></div>
+                    <div>Amount: <strong id="success-amount">-</strong></div>
+                    <div>Payment: <strong id="success-payment">-</strong></div>
+                </div>
+            </div>
+            
+            <p id="email-status" style="font-size: 0.85rem; color: var(--text-secondary); margin: 1rem 0;"></p>
+            
+            <div class="tip-box">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>ℹ️</span>
+                    <span style="font-size: 0.9rem;">The admin can now view your booking in the dashboard.</span>
+                </div>
+            </div>
+            
+            <!-- RECEIPT BUTTONS -->
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn" onclick="showReceipt()" style="flex: 1; background: var(--brand); color: white; border: none;">
+                    🧾 View Receipt
+                </button>
+                <button class="btn" onclick="window.location.href='user.html'" style="flex: 1; background: var(--brand-soft); color: var(--text-primary); border: 1px solid var(--border-color);">
+                    Return Home
+                </button>
+            </div>
+            
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 1.5rem;">
+                Need help? Contact us at (02) 1234-567
+            </p>
+        </div>
+    </div>
+
+    <!-- ========== RECEIPT MODAL – FIXED: SMALLER TEXT, BACK BUTTON, NO X ========== -->
+    <div id="receipt-modal" class="overlay hidden">
+        <div class="success-card" style="max-width: 480px; text-align: left; padding: 1.8rem;">
+            <h2 style="margin: 0 0 1.2rem 0; color: var(--brand); font-size: 1.5rem; text-align: center;">Receipt</h2>
+            <div id="receipt-content" style="font-size: 0.8rem;"></div>
+            <div style="display: flex; gap: 0.8rem; margin-top: 1.5rem; justify-content: center;">
+                <button class="btn" onclick="closeReceipt()" style="flex: 0 1 auto; padding: 0.6rem 1.2rem; background: var(--brand-soft); color: var(--text-primary); border: 1px solid var(--border-color); font-size: 0.85rem;">
+                    ← Back
+                </button>
+                <button class="btn" onclick="printReceipt()" style="flex: 0 1 auto; padding: 0.6rem 1.2rem; background: var(--brand); color: white; font-size: 0.85rem;">
+                    🖨️ Print
+                </button>
+                <button class="btn" onclick="closeReceipt()" style="flex: 0 1 auto; padding: 0.6rem 1.2rem; background: var(--brand-soft); color: var(--text-primary); border: 1px solid var(--border-color); font-size: 0.85rem;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="booking-page.js"></script>
+</body>
+</html>

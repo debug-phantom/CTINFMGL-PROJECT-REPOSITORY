@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPBC Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <div id="login-screen" class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <div class="login-icon">🔐</div>
+                    <h1 class="login-title">Admin Dashboard</h1>
+                    <p class="login-subtitle">Login to manage bookings</p>
+                </div>
+                <div id="login-error" class="error-message hidden"></div>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="admin-email">Email Address</label>
+                        <input type="email" id="admin-email" required placeholder="admin@kpbc.com"
+                            autocomplete="username" value="admin@kpbc.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" required placeholder="Enter password"
+                            autocomplete="current-password" value="Admin24258">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login-btn">Login to Dashboard</button>
+                </form>
+            </div>
+        </div>
+        <div id="admin-dashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1>📊 Booking Management</h1>
+                    <p>Manage and monitor all court reservations</p>
+                </div>
+                <div class="header-right">
+                    <div class="theme-toggle">
+                        <button id="theme-toggle-btn" class="theme-btn" onclick="toggleTheme()">
+                            <span class="moon-icon">🌙</span>
+                            <span class="sun-icon">☀️</span>
+                        </button>
+                    </div>
+                    <div class="admin-info">
+                        <div class="admin-name">Administrator</div>
+                        <div class="admin-role">System Admin</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Bookings</span>
+                        <span class="stat-icon">📊</span>
+                    </div>
+                    <div class="stat-value" id="total-bookings">0</div>
+                </div>
+                <div class="stat-card confirmed">
+                    <div class="stat-header">
+                        <span class="stat-label">Confirmed</span>
+                        <span class="stat-icon">✓</span>
+                    </div>
+                    <div class="stat-value" id="confirmed-bookings">0</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-header">
+                        <span class="stat-label">Pending</span>
+                        <span class="stat-icon">⏳</span>
+                    </div>
+                    <div class="stat-value" id="pending-bookings">0</div>
+                </div>
+                <div class="stat-card cancelled">
+                    <div class="stat-header">
+                        <span class="stat-label">Cancelled</span>
+                        <span class="stat-icon">✗</span>
+                    </div>
+                    <div class="stat-value" id="cancelled-bookings">0</div>
+                </div>
+            </div>
+            <div class="bookings-section">
+                <div class="section-header">
+                    <h2 class="section-title">All Bookings</h2>
+                    <div class="section-controls">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="search-input" placeholder="Search by name, email, ID..."
+                                oninput="filterBookings()">
+                        </div>
+                        <select class="filter-select" id="status-filter" onchange="filterBookings()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Court</th>
+                                <th>Date & Time</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body">
+                            <tr>
+                                <td colspan="10">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📋</div>
+                                        <div class="empty-text">No bookings found</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+
+</html>

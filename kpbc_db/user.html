@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katipunan Prime Badminton Center - Booking System</title>
+  <link rel="stylesheet" href="user.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* Additional styles for better UX */
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      z-index: 10;
+    }
+    
+    .nav-link-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .admin-link {
+      color: #ef4444 !important;
+      font-weight: 700;
+      border: 2px solid #ef4444;
+      padding: 0.5rem 1.2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    
+    .admin-link:hover {
+      background: #ef4444;
+      color: white !important;
+      transform: translateY(-2px);
+    }
+    
+    .booking-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .stat-bubble {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      min-width: 150px;
+      transition: transform 0.3s ease;
+    }
+    
+    .stat-bubble:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0066ff;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: #64748b;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .quick-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .quick-action-btn {
+      padding: 1rem 2rem;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .quick-action-btn:hover {
+      border-color: #0066ff;
+      color: #0066ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
+    }
+    
+    .quick-action-btn.primary {
+      background: #0066ff;
+      color: white;
+      border-color: #0066ff;
+    }
+    
+    .quick-action-btn.primary:hover {
+      background: #0052cc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.2);
+    }
+    
+    .testimonial-section {
+      padding: 4rem 2rem;
+      background: #f8fafc;
+      text-align: center;
+    }
+    
+    .testimonial {
+      max-width: 800px;
+      margin: 0 auto;
+      font-style: italic;
+      color: #475569;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    
+    .testimonial-author {
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    .location-section {
+      padding: 4rem 2rem;
+      background: white;
+      text-align: center;
+    }
+    
+    .location-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #f0f7ff;
+      padding: 2rem;
+      border-radius: 16px;
+      border: 2px solid #0066ff;
+    }
+    
+    .hours-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .hours-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .hours-title {
+      color: #0066ff;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <nav>
+      <div class="nav-content">
+        <div class="logo" id="site-title" onclick="window.location.href='user.html'" style="cursor: pointer;">
+          Katipunan Prime
+        </div>
+        <div class="nav-actions">
+          <div class="nav-menu">
+            <a class="nav-link" onclick="showPage('home')">Home</a>
+            <a class="nav-link" onclick="showPage('gallery')">Facilities</a>
+            <a class="nav-link" onclick="showPage('about')">About</a>
+            <a class="nav-link nav-bookings hidden" href="rates-page.html">Rates</a>
+            <a class="nav-link nav-bookings hidden" href="booking-page.html" style="color: #0066ff; font-weight: 700;">
+              📅 Book Court
+            </a>
+            <a class="nav-link nav-bookings hidden" onclick="window.location.href='profile.php'">My Profile</a>
+          </div>
+
+          <div class="header-btn-wrapper">
+            
+            <div class="nav-link-container">
+              <a class="nav-link admin-link" href="admin.html">
+                ⚙️ Admin
+              </a>
+              <span class="notification-badge" id="admin-notification" style="display: none;">!</span>
+            </div>
+
+            <div class="theme-toggle">
+              <button id="theme-toggle-btn" class="theme-btn">☀️</button>
+            </div>
+
+            <div class="nav-guest">
+              <button class="btn btn-outline" onclick="openAuthModal('login')">Login</button>
+              <button class="btn btn-primary" onclick="openAuthModal('signup')">Sign Up</button>
+            </div>
+
+            <div class="nav-user hidden">
+              <span class="user-name" id="user-display-name"></span>
+              <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </nav>
+
+    <div id="home-page" class="page-content">
+      <section class="hero">
+        <div class="hero-content">
+          <h1 id="main-headline">Premium Badminton Court in Katipunan</h1>
+          <p id="hero-description">Experience world-class facilities, professional equipment, and seamless online booking for your ultimate badminton experience.</p>
+          
+          <div class="booking-stats">
+            <div class="stat-bubble">
+              <div class="stat-number" id="courts-available">10</div>
+              <div class="stat-label">Courts Available</div>
+            </div>
+            <div class="stat-bubble">
+              <div class="stat-number">₱170</div>
+              <div class="stat-label">Starting Rate</div>
+            </div>
+            <div class="stat-bubble">
+              <div class="stat-number">24/7</div>
+              <div class="stat-label">Online Booking</div>
+            </div>
+          </div>
+          
+          <button class="cta-large" onclick="handleBookNowClick()">
+            <span>🏸</span> Book Your Court Now
+          </button>
+          
+          <div class="quick-actions">
+            <button class="quick-action-btn" onclick="window.location.href='rates-page.html'">
+              <span>💰</span> View Rates
+            </button>
+            <button class="quick-action-btn primary" onclick="window.location.href='booking-page.html'">
+              <span>📅</span> Quick Booking
+            </button>
+            <button class="quick-action-btn" onclick="showPage('gallery')">
+              <span>🏟️</span> View Facilities
+            </button>
+          </div>
+        </div>
+      </section>
+      
+      <section class="features">
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <h3>10 Premium Courts</h3>
+            <p>Professional-grade indoor courts with perfect lighting and flooring for optimal play.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Easy Online Booking</h3>
+            <p>Book your court anytime with our simple, secure online reservation system.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Flexible Pricing</h3>
+            <p>Choose between hourly rates or play-all-you-can options to suit your needs.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Real-time Admin Sync</h3>
+            <p>All bookings instantly appear in admin dashboard for efficient management.</p>
+          </div>
+        </div>
+      </section>
+      
+      <section class="testimonial-section">
+        <h2 style="margin-bottom: 2rem; color: #1e293b;">What Our Players Say</h2>
+        <div class="testimonial">
+          "The online booking system is so convenient! I can book a court in minutes and the admin always confirms quickly. Best badminton facility in Marikina!"
+        </div>
+        <div class="testimonial-author">- Juan Dela Cruz, Regular Player</div>
+      </section>
+      
+      <section class="location-section">
+        <h2 style="margin-bottom: 1rem; color: #1e293b;">Visit Us Today</h2>
+        <p style="color: #64748b; margin-bottom: 2rem;">We're conveniently located in the heart of Marikina</p>
+        
+        <div class="location-card">
+          <h3 style="color: #0066ff; margin-bottom: 1rem;">📍 Location</h3>
+          <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+            52 Katipunan Street, Marikina City<br>
+            Metro Manila, Philippines
+          </p>
+          <p style="color: #64748b; font-size: 0.9rem;">
+            <strong>Contact:</strong> (02) 1234-567 | info@katipunanprime.com
+          </p>
+        </div>
+        
+        <div class="hours-section">
+          <div class="hours-card">
+            <div class="hours-title">Weekday Hours</div>
+            <p>6:00 AM - 10:00 PM</p>
+          </div>
+          <div class="hours-card">
+            <div class="hours-title">Weekend Hours</div>
+            <p>7:00 AM - 11:00 PM</p>
+          </div>
+          <div class="hours-card">
+            <div class="hours-title">Peak Hours</div>
+            <p>5:00 PM - 9:00 PM</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="gallery-page" class="page-content hidden">
+      <section class="gallery-section" style="padding-top: 8rem;">
+        <div class="gallery-content">
+          <div class="section-header">
+            <h2>Our Facilities Features</h2>
+            <p>Take a look at our world-class badminton courts and amenities.</p>
+          </div>
+          <div class="gallery-grid">
+            <div class="gallery-item">
+              <div class="gallery-image-placeholder">🏸</div>
+              <div class="gallery-caption">
+                <h3>Premium Courts</h3>
+                <p>10 professional-grade courts with tournament flooring.</p>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image-placeholder">💡</div>
+              <div class="gallery-caption">
+                <h3>Perfect Lighting</h3>
+                <p>State-of-the-art LED lighting for optimal visibility.</p>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image-placeholder">🛋️</div>
+              <div class="gallery-caption">
+                <h3>Comfortable Lounge</h3>
+                <p>Relax in our air-conditioned players' lounge.</p>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image-placeholder">💯</div>
+              <div class="gallery-caption">
+                <h3>Top Equipment</h3>
+                <p>Premium Yonex rackets available for rent.</p>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image-placeholder">💪</div>
+              <div class="gallery-caption">
+                <h3>Fitness Area</h3>
+                <p>Warm up and cool down in our fitness area.</p>
+              </div>
+            </div>
+            <div class="gallery-item">
+              <div class="gallery-image-placeholder">🚿</div>
+              <div class="gallery-caption">
+                <h3>Clean Facilities</h3>
+                <p>Spotless locker rooms and showers available.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== ABOUT PAGE – ONLY CHANGE: replaced placeholder with actual image ========== -->
+<div class="about-image">
+          
+            </div>
+    <div id="about-page" class="page-content hidden">
+      <section class="about-section" style="padding-top: 8rem;">
+        <div class="about-content">
+          <div class="about-text">
+            <h2>About Katipunan Prime</h2>
+            <p>Katipunan Prime is a premier badminton facility located at 52 Katipunan Street, Marikina City, Metro Manila, Philippines. We are a dedicated sports venue offering badminton courts for players of all skill levels, from beginners to tournament professionals.</p>
+            
+            <p>Our facility operates daily, typically from early morning until late evening and welcomes both walk-in players and booked reservations. We provide a space where individuals and groups can enjoy regular play, friendly matches, or serious training sessions.</p>
+            
+            <p>With our state-of-the-art online booking system, players can easily reserve courts, manage their bookings, and even sync with our admin dashboard for seamless facility management. Many local badminton groups and players often meet and schedule games here thanks to our accessible location and community presence.</p>
+            
+            <div class="about-stats">
+              <div class="stat-item"><div class="stat-number">10</div><div class="stat-text">Premium Courts</div></div>
+              <div class="stat-item"><div class="stat-number">5000+</div><div class="stat-text">Happy Players</div></div>
+              <div class="stat-item"><div class="stat-number">4.7</div><div class="stat-text">Average Rating</div></div>
+              <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-text">Online Booking</div></div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+              <button class="btn btn-primary" onclick="window.location.href='booking-page.html'" style="margin-right: 1rem;">
+                Book a Court Now
+              </button>
+              <button class="btn btn-outline" onclick="window.location.href='rates-page.html'">
+                View Pricing
+              </button>
+            </div>
+          </div>
+            <div class="about-image-placeholder">
+                           <img src="1.png" alt="Katipunan Prime" style="width: 100%; height: 100%; object-fit: contain; border-radius: 20px;">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="rates-page" class="page-content hidden">
+      <section class="rates-section" style="padding-top: 8rem;">
+        <div class="rates-content">
+          <div class="rates-grid">
+            <div class="rate-card">
+              <div class="rate-title">Hourly Rate</div>
+              <div class="rate-price">₱170</div>
+              <ul class="rate-features">
+                <li>✓ Perfect for quick games</li>
+                <li>✓ Access to all courts</li>
+                <li>✓ Free parking included</li>
+                <li>✓ 1-hour minimum booking</li>
+              </ul>
+              <button class="btn btn-primary btn-full" onclick="redirectToBooking()">Book Now</button>
+            </div>
+            <div class="rate-card featured">
+              <div class="rate-badge">MOST POPULAR</div>
+              <div class="rate-title">Play-All-You-Can</div>
+              <div class="rate-price">₱200</div>
+              <ul class="rate-features">
+                <li>✓ Unlimited playing time</li>
+                <li>✓ Perfect for tournaments</li>
+                <li>✓ Access to fitness area</li>
+                <li>✓ Priority court assignment</li>
+              </ul>
+              <button class="btn btn-primary btn-full" onclick="redirectToBooking()">Book Now</button>
+            </div>
+            <div class="rate-card">
+              <div class="rate-title">Equipment Rental</div>
+              <div class="rate-price">Add-Ons</div>
+              <ul class="rate-features">
+                <li>₱50 - Racket rental (per hour)</li>
+                <li>₱30 - Shuttlecock (tube of 12)</li>
+                <li>₱20 - Towel rental</li>
+                <li>₱40 - Grip replacement</li>
+                <li>₱60 - Shoe rental</li>
+              </ul>
+              <button class="btn btn-primary btn-full" onclick="redirectToBooking()">Add to Booking</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== AUTH MODAL with Forgot Password link ========== -->
+    <div class="modal-overlay" id="auth-modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeAuthModal()">×</button>
+        
+        <div id="login-form-container">
+          <h2 class="modal-title">Welcome Back!</h2>
+          <div id="login-error" class="error-message hidden"></div>
+          <form id="login-form">
+            <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
+            <div class="form-group"><label>Password</label><input type="password" id="login-password" required></div>
+            <div style="text-align: right; margin-top: -5px; margin-bottom: 10px;">
+              <a onclick="handleForgotPassword()" style="color: #6b7280; text-decoration: none; font-size: 0.85rem; cursor: pointer;">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Login</button>
+          </form>
+          <div class="form-switch">Don't have an account? <a onclick="switchToSignup()">Sign up</a></div>
+        </div>
+
+        <div id="signup-form-container" class="hidden">
+          <h2 class="modal-title">Create Account</h2>
+          <div id="signup-error" class="error-message hidden"></div>
+          <form id="signup-form">
+            <div class="form-group"><label>Full Name</label><input type="text" id="signup-name" required></div>
+            <div class="form-group"><label>Email</label><input type="email" id="signup-email" required></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="signup-phone" required></div>
+            <div class="form-group"><label>Password</label><input type="password" id="signup-password" required></div>
+            <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+          </form>
+          <div class="form-switch">Already have an account? <a onclick="switchToLogin()">Login</a></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p id="footer-text">© 2024 Katipunan Prime Badminton Center - All Rights Reserved</p>
+        <div class="footer-contact" style="margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; font-size: 0.9rem;">
+          <a href="tel:+6321234567" style="color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+            <span>📞</span> (02) 1234-567
+          </a>
+          <a href="mailto:info@katipunanprime.com" style="color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+            <span>✉️</span> info@katipunanprime.com
+          </a>
+          <a href="#" style="color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+            <span>📍</span> 52 Katipunan St., Marikina
+          </a>
+        </div>
+        <div style="margin-top: 1.5rem; font-size: 0.85rem; color: #94a3b8;">
+          <p>Connect with us:</p>
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 0.5rem;">
+            <a href="#" style="color: #0066ff; text-decoration: none;">Facebook</a>
+            <a href="#" style="color: #0066ff; text-decoration: none;">Instagram</a>
+            <a href="#" style="color: #0066ff; text-decoration: none;">Twitter</a>
+            <a href="#" style="color: #0066ff; text-decoration: none;">Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- ONLY ONE SCRIPT - all logic in user.js -->
+  <script src="user.js"></script>
+</body>
+</html>

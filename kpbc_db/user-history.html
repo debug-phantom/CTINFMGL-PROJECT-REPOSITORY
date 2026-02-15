@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer History | KPBC</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .history-container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .booking-card { 
+            background: var(--bg-card); 
+            padding: 20px; 
+            border-radius: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 15px; 
+            border: 1px solid var(--border-color);
+        }
+        .back-nav { margin-bottom: 20px; }
+        .btn-back { 
+            color: var(--brand); 
+            text-decoration: none; 
+            font-weight: bold; 
+            cursor: pointer;
+        }
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+        #user-display-email {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+        .loading-state {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 40px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        /* Status badge colors already defined in admin.css */
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <div class="history-container">
+            <div class="back-nav">
+                <a href="admin.html" class="btn-back">← Back to Dashboard</a>
+            </div>
+            <h1 style="color: var(--text-primary);">User History</h1>
+            <div id="user-display-email" style="color: var(--text-secondary);"></div>
+            <div id="history-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- THEME INHERITANCE (same as admin) ---
+        (function() {
+            const savedTheme = localStorage.getItem('admin-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+    <script src="user-history.js"></script>
+</body>
+</html>
